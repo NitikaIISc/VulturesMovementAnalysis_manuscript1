@@ -293,51 +293,100 @@ par(mar=c(5,4,4,4))
 length(RandCorrDegree_CoFlight$rho)
 ##p-value degree co-flight and aggregate correlation rho: positive
 # two tailed:
-p2_deg_coFlight=(nrow(subset(RandCorrDegree_CoFlight,
-                             rho>=abs(Degree_CoFlight$estimate)))+nrow(subset(RandCorrDegree_CoFlight,
-                                                                        rho<=-(abs(Degree_CoFlight$estimate)))))/iter
-p2_deg_coRoost<-(nrow(subset(RandCorrDegree_NocturnalGroundInteractions,
-                           rho>=abs(Degree_NocturnalGroundInteractions$estimate)))+
-                   nrow(subset(RandCorrDegree_NocturnalGroundInteractions,
-                               rho<=-(abs(Degree_NocturnalGroundInteractions$estimate)))))/iter
-p2_deg_coFeed<-(nrow(subset(RandCorrDegree_DiurnalGroundInteractions,
-                          rho>=abs(Degree_DiurnalGroundInteractions$estimate)))+
-  nrow(subset(RandCorrDegree_DiurnalGroundInteractions,
-              rho<=-abs(Degree_DiurnalGroundInteractions$estimate)
-                         )))/iter
+
+obs_D_F = Degree_CoFlight$estimate
+exp_D_F = RandCorrDegree_CoFlight$rho
+
+rank_obs_D_F <- sum(exp_D_F <= obs_D_F)
+
+# Calculate the quantile based on the rank
+quantile_value_D_F <- rank_obs_D_F / length(exp_D_F)
+p_deg_coFly<- min(c(quantile_value_D_F,(1-quantile_value_D_F)))*2
+
+# degree nocturnal:
+obs_D_N = Degree_NocturnalGroundInteractions$estimate
+exp_D_N = RandCorrDegree_NocturnalGroundInteractions$rho
+
+rank_obs_D_N <- sum(exp_D_N <= obs_D_N) 
+
+# Calculate the quantile based on the rank
+quantile_value_D_N <- rank_obs_D_N / length(exp_D_N)
+p_deg_coRoost<- min(c(quantile_value_D_N,(1-quantile_value_D_N)))*2
+  
+# degree diurnal
+obs_D_D = Degree_DiurnalGroundInteractions$estimate
+exp_D_D = RandCorrDegree_DiurnalGroundInteractions$rho
+
+rank_obs_D_D <- sum(exp_D_D <= obs_D_D) 
+
+# Calculate the quantile based on the rank
+quantile_value_D_D <- rank_obs_D_D / length(exp_D_D)
+p_deg_coFeed<- min(c(quantile_value_D_D,(1-quantile_value_D_D)))*2
+
+
 ####################  Strength ###########################
-p2_str_coFlight<-(nrow(subset(RandCorrStrength_CoFlight,
-                            rho>=Strength_CoFlight$estimate))+
-  nrow(subset(RandCorrStrength_CoFlight,rho<=-abs(Strength_CoFlight$estimate))))/iter
+# strength flight:
+obs_S_F = Strength_CoFlight$estimate
+exp_S_F = RandCorrStrength_CoFlight$rho
 
-##p-value strength co-roost and aggregate correlation rho: positive
-p2_str_coRoost<-(nrow(subset(RandCorrStrength_NocturnalGroundInteractions,
-                           rho>=abs(Strength_NocturnalGroundInteractions$estimate)))+
-  nrow(subset(RandCorrStrength_NocturnalGroundInteractions,
-              rho<=-abs(Strength_NocturnalGroundInteractions$estimate))))/iter
+rank_obs_S_F <- sum(exp_S_F <= obs_S_F)
 
-##p-value strength co-feed and aggregate correlation rho
-p2_str_coFeed<-(nrow(subset(RandCorrStrength_DiurnalGroundInteractions,
-                          rho>=abs(Strength_DiurnalGroundInteractions$estimate)))+
-                      nrow(subset(RandCorrStrength_DiurnalGroundInteractions,
-                                  rho<=-(abs(Strength_DiurnalGroundInteractions$estimate)))))/iter
+# Calculate the quantile based on the rank
+quantile_value_S_F <- rank_obs_S_F / length(exp_S_F)
+p_str_coFly<- min(c(quantile_value_S_F,(1-quantile_value_S_F)))*2
+
+
+# strength nocturnal:
+obs_S_N = Strength_NocturnalGroundInteractions$estimate
+exp_S_N = RandCorrStrength_NocturnalGroundInteractions$rho
+
+rank_obs_S_N <- sum(exp_S_N <= obs_S_N)
+
+# Calculate the quantile based on the rank
+quantile_value_S_N <- rank_obs_S_N / length(exp_S_N)
+p_str_coRoost<- min(c(quantile_value_S_N,(1-quantile_value_S_N)))*2
+
+
+# strength diurnal:
+obs_S_D = Strength_DiurnalGroundInteractions$estimate
+exp_S_D = RandCorrStrength_DiurnalGroundInteractions$rho
+
+rank_obs_S_D <- sum(exp_S_D <= obs_S_D)
+
+# Calculate the quantile based on the rank
+quantile_value_S_D <- rank_obs_S_D / length(exp_S_D)
+p_str_coFeed<- min(c(quantile_value_S_D,(1-quantile_value_S_D)))*2
+
 
 ########## PageRanks #####################
-##p-value PageRank co-flight and aggregate correlation rho
-p2_PgR_coFlight<-(nrow(subset(RandCorrPageRank_CoFlight,
-                            rho>=abs(PageRank_CoFlight$estimate)))+
-  nrow(subset(RandCorrPageRank_CoFlight,
-              rho<=-abs(PageRank_CoFlight$estimate))))/iter
+## PR flight
+obs_PR_F = PageRank_CoFlight$estimate
+exp_PR_F = RandCorrPageRank_CoFlight$rho
 
-##p-value PageRank co-roost and aggregate correlation rho: positive
-p2_PgR_coRoost<-(nrow(subset(RandCorrPageRank_NocturnalGroundInteractions,
-                           rho>=abs(PageRank_NocturnalGroundInteractions$estimate)))+
-  nrow(subset(RandCorrPageRank_NocturnalGroundInteractions,
-              rho<=-(abs(PageRank_NocturnalGroundInteractions$estimate
-                           )))))/iter
+rank_obs_PR_F <- sum(exp_PR_F <= obs_PR_F)
 
-##p-value PageRank co-feed and aggregate correlation rho: positive
-p2_PgR_coFeed<-(nrow(subset(RandCorrPageRank_DiurnalGroundInteractions,
-                          rho>=abs(PageRank_DiurnalGroundInteractions$estimate)))+
-  nrow(subset(RandCorrPageRank_DiurnalGroundInteractions,
-              rho<=-(abs(PageRank_DiurnalGroundInteractions$estimate)))))/iter
+# Calculate the quantile based on the rank
+quantile_value_PR_F <- rank_obs_PR_F / length(exp_PR_F)
+p_PR_coFly<- min(c(quantile_value_PR_F,(1-quantile_value_PR_F)))*2
+
+
+# PR nocturnal
+obs_PR_N = PageRank_NocturnalGroundInteractions$estimate
+exp_PR_N = RandCorrPageRank_NocturnalGroundInteractions$rho
+
+rank_obs_PR_N <- sum(exp_PR_N <= obs_PR_N)
+
+# Calculate the quantile based on the rank
+quantile_value_PR_N <- rank_obs_PR_N / length(exp_PR_N)
+p_PR_coRoost<- min(c(quantile_value_PR_N,(1-quantile_value_PR_N)))*2
+
+# PR diurnal
+obs_PR_D = PageRank_DiurnalGroundInteractions$estimate
+exp_PR_D = RandCorrPageRank_DiurnalGroundInteractions$rho
+
+rank_obs_PR_D <- sum(exp_PR_D <= obs_PR_D)
+
+# Calculate the quantile based on the rank
+quantile_value_PR_D <- rank_obs_PR_D / length(exp_PR_D)
+p_PR_coFeed<- min(c(quantile_value_PR_D,(1-quantile_value_PR_D)))*2
+
